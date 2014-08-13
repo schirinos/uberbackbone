@@ -26,7 +26,7 @@
      * The views object should be key value pairs where the key is a css selector (ex: .main) and the value is instance of a Backbone view.
      * <br /> `Ex: var myView = new BaseView(views : {'.main':new BakeView()});`
      */
-    var UberBackbone.View = Backbone.View.extend({
+    UberBackbone.View = Backbone.View.extend({
         /**
          * Holds child views attached to different areas of the template
          * specified by a selector.
