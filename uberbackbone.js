@@ -685,7 +685,7 @@
          */
         initialize: function (options) {
             // Call parent to to setup stuff
-            BaseView.prototype.initialize.apply(this, arguments);
+            UberBackbone.View.prototype.initialize.apply(this, arguments);
 
             // Merge certain options
             this.mergeOpts(options, ['itemView', 'template']);
