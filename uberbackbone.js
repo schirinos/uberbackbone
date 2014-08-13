@@ -34,18 +34,6 @@
          */
         views: {},
         /**
-         * Holds ref to parent view
-         * @type {Object}
-         */
-        parent: {},
-        /**
-         * Flag that tells whether to use the template's first child element as the view's root element or not.
-         * By default backbone views automatically creates a <div> to wrap the view.
-         * Setting this to true will use the first child in the template's html as the view's element.
-         * @type {Boolean}
-         */
-        replace: true,
-        /**
          * Options for animation on the view
          * @type {Object}
          */
@@ -56,6 +44,21 @@
          */
         template: {},
         /**
+         * The template for the view
+         * @type {Object}
+         */
+        tplLoading: _.template('<div data-loading-msg class="progress progress-striped active text-center"><div class="progress-bar"  role="progressbar" style="width: 100%;"></div></div>'),
+        /**
+         * The template for the view
+         * @type {Object}
+         */
+        tplAlert: _.template('<div class="alert alert-danger" data-alert-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-warning-sign"></i></div>'),
+        /**
+         * The template for the view
+         * @type {Object}
+         */
+        tplInfo: _.template('<div class="alert alert-info" data-info-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-info-sign"></i></div>'),
+        /**
          * Automatically called upon object construction
          */
         initialize: function (options) {
@@ -64,7 +67,7 @@
             this.views = {};
 
             // Merge selected options into object
-            this.mergeOpts(options, ['views', 'animate', 'template', 'replace']);
+            this.mergeOpts(options, ['views', 'animate', 'template']);
 
             // Attach the view's template
             this._attachTemplate();
@@ -207,31 +210,23 @@
             if (_.isFunction(this.template)) {
                 // Is a model set on the view?
                 if (this.model) {
-                    if (this.replace) {
-                        // Create new dom element, and insert the template as innerhtml
-                        var new_elem = document.createElement('div');
-                        new_elem.innerHTML = this.template(this.model.toJSON());
+                    // Create new dom element, and insert the template as innerhtml
+                    var new_elem = document.createElement('div');
+                    new_elem.innerHTML = this.template(this.model.toJSON());
 
-                        // Extract the first child of the dom element and use it as the view's new root element
-                        this.setElement(new_elem.firstChild);
-                    } else {
-                        this.$el.html(this.template(this.model.toJSON()));
-                    }
+                    // Extract the first child of the dom element and use it as the view's new root element
+                    this.setElement(new_elem.firstChild);
 
                     // Generate a bindings array from template markup
                     // and merge with the views set binding
                     this.createStickitBindings();
                 } else {
-                    if (this.replace) {
-                        // Create new dom element, and insert the template as innerhtml
-                        var new_elem = document.createElement('div');
-                        new_elem.innerHTML = this.template();
+                    // Create new dom element, and insert the template as innerhtml
+                    var new_elem = document.createElement('div');
+                    new_elem.innerHTML = this.template();
 
-                        // Extract the first child of the dom element and use it as the view's new root element
-                        this.setElement(new_elem.firstChild);
-                    } else {
-                        this.$el.html(this.template());
-                    }
+                    // Extract the first child of the dom element and use it as the view's new root element
+                    this.setElement(new_elem.firstChild);
                 }
             }
         },
@@ -383,7 +378,7 @@
             this.hideLoading();
 
             // Compile template to html
-            var html = TplLoading({msg: msgText});
+            var html = this.tplLoading({msg: msgText});
 
             // If we see this tag then we insert the loading message as its next sibiling
             var tag = this.$('[data-loading-location]');
@@ -422,11 +417,11 @@
             // If we see a this tag then we insert the loading message as its next sibiling
             var tag = this.$('[data-alert-location]');
             if (tag[0]) {
-                tag.after(TplAlert({msg: msgText}));
+                tag.after(this.tplAlert({msg: msgText}));
 
             // Otherwise we just attach it to top of template
             } else {
-                this.$el.prepend(TplAlert({msg: msgText}));
+                this.$el.prepend(this.tplAlert({msg: msgText}));
             }
         },
         /**
@@ -457,11 +452,11 @@
             // If we see a data-msg-info tag then we insert the message as its next sibiling
             var tag = this.$('[data-info-location]');
             if (tag[0]) {
-                tag.after(TplInfo({msg: msgText}));
+                tag.after(this.tplInfo({msg: msgText}));
 
             // Otherwise we just attach it to top of template
             } else {
-                this.$el.prepend(TplInfo({msg: msgText}));
+                this.$el.prepend(this.tplInfo({msg: msgText}));
 
                 // For callbacks
                 var self = this;
