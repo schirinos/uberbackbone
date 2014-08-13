@@ -542,9 +542,10 @@
                 // automatically as json string into an object
                 var stickit = $(this).data('stickit');
 
-                // Allow short-hand binding definition
-                if (_.isString(stickit)) {
-                    bindings['[data-stickit="'+stickit+'"]'] = stickit;
+                // Allow short-hand binding definition.
+                // Numbers need to be cast to Strings for stickit to properly wireup
+                if (_.isString(stickit) || _.isNumber(stickit)) {
+                    bindings['[data-stickit="'+stickit+'"]'] = String(stickit);
                 } else {
                     bindings = _.extend(bindings, stickit);
                 }
