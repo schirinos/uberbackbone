@@ -664,7 +664,7 @@
      * Constructor
      * @constructor
      */
-    var UberBackbone.Model = Backbone.Model.extend({
+    UberBackbone.Model = Backbone.Model.extend({
         /**
          * The options passed to the function
          * @type {Object}
@@ -686,7 +686,7 @@
      * @constructor
      * @alias app/collections/base
      */
-    var UberBackbone.Collection = Backbone.Collection.extend({
+    UberBackbone.Collection = Backbone.Collection.extend({
         /**
          * The options passed to the function
          * @type {Object}
