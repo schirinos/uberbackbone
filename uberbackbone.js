@@ -688,7 +688,7 @@
             UberBackbone.View.prototype.initialize.apply(this, arguments);
 
             // Merge certain options
-            this.mergeOpts(options, ['itemView', 'template']);
+            this.mergeOpts(options, ['itemView', 'template', 'filter', 'filterName']);
 
             // Listen for collection events
             this.listenTo(this.collection, 'add', this.addItem);
@@ -724,15 +724,30 @@
             var self = this;
 
             // Do we have filter criteria set?
+            var filters = "";
             if (this.filter && this.filterName) {
                 var filterRegex = new RegExp(this.filter,'gi');
+
+                // The filter criteria can look for matches in multiple fields
+                filters = this.filterName.split(",");
             }
 
             // Iterate through collection
             _.each(collection.models, function (item, idx, list){
+
                 // Is there a filter set?
                 if (filterRegex) {
-                    if (item.get(self.filterName).match(filterRegex)) {
+                    // Is our filter criteria located in one of the filter fields?
+                    var found = _.some(filters, function (elem, index, arr) {
+                        // Need to convert value to string in order to do
+                        // the Regex matching properly
+                        var val = String(item.get(String(elem)));
+
+                        return val ? val.match(filterRegex) : false;
+                    });
+
+
+                    if (found) {
                         self.addItem(item, list, options);
                     }
                 } else {
