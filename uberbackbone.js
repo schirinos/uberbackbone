@@ -694,9 +694,6 @@
             this.listenTo(this.collection, 'add', this.addItem);
             this.listenTo(this.collection, 'reset', this.resetItems);
             this.listenTo(this.collection, 'sort', this.resetItems);
-
-            // Refresh our list
-            this.refresh();
         },
         /**
          * Toggles sort direction on the collection
@@ -746,23 +743,36 @@
         /**
          * Refresh the view data
          */
-        refresh: function (model, collection, options) {
+        refresh: function (options) {
             // show loading
             this.showLoading('Loading');
 
             // For callbacks
             var self = this;
 
-            // Get data from server
-            this.collection.fetch({reset: true})
-            .always(function () {
-                self.hideLoading();
-            })
-            .done(function () {
-                self.collection.sort();
-            })
-            .fail(function () {
-            });
+            // Since this function does a sort of the data page when it
+            // comes back to us, by default we trigger no events
+            // and reset the collection. This is because
+            // on a sort the view is set to re-render the newly sorted collection.
+            // If we didn't have silent set to true, it would cause us to
+            // render the list twice
+            options = options || {};
+            options.reset = options.reset || true;
+            options.silent = options.silent || true;
+
+            // Try fetching collection if there is one
+            if (this.collection) {
+                this.collection.fetch(options)
+                .always(function () {
+                    self.hideLoading();
+                })
+                .done(function () {
+                    self.collection.sort();
+                })
+                .fail(function () {
+
+                });
+            }
         }
     });
 
