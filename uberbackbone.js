@@ -1196,16 +1196,26 @@
             if (dir === 'desc') {
                 return function (prop) {
                     return function (model1, model2) {
-                        if (model1.get(prop) > model2.get(prop)) return -1; // before
-                        if (model2.get(prop) > model1.get(prop)) return 1; // after
+                        // Convert prop values to lower-case strings so that we
+                        // can do case-insensitive sorting
+                        var prop1 = String(model1.get(prop)).toLowerCase();
+                        var prop2 = String(model2.get(prop)).toLowerCase();
+
+                        if (prop1 > prop2) return -1; // before
+                        if (prop2 > prop1) return 1; // after
                         return 0; // equal
                     }
                 }
             } else {
                 return function (prop) {
                     return function (model1, model2) {
-                        if (model1.get(prop) > model2.get(prop)) return 1; // after
-                        if (model1.get(prop) < model2.get(prop)) return -1; // before
+                        // Convert prop values to lower-case strings so that we
+                        // can do case-insensitive sorting
+                        var prop1 = String(model1.get(prop)).toLowerCase();
+                        var prop2 = String(model2.get(prop)).toLowerCase();
+
+                        if (prop1 > prop2) return 1; // after
+                        if (prop1 < prop2) return -1; // before
                         return 0; // equal
                     }
                 }
