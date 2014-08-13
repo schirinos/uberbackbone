@@ -761,6 +761,11 @@
         },
     });
 
+    // Attach to Backbone object
+    Backbone.UberView = UberBackbone.View
+    Backbone.UberModel = UberBackbone.Model
+    Backbone.UberCollection = UberBackbone.Collection
+
     // Export module
     return UberBackbone;
 }));
