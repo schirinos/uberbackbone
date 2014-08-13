@@ -14,8 +14,7 @@ This enhanced view allows a multitude of functionality not found in the basic ba
 Provides boilerplate and helper methods to create list based backbone view.
 
 ## UberBackbone.Model
-This is a very minimal enhancement. All it provides is shortcut functions to merge properties directly onto the
-model object.
+A copy of [Backbone-Nested](https://github.com/afeld/backbone-nested) with some additional customizations
 
 ## UberBackbone.Collection
 Allows you to sort the collection by a field name on the models contained in the collection.
