@@ -47,17 +47,17 @@
          * The template for the view
          * @type {Object}
          */
-        tplLoading: _.template('<div data-loading-msg class="progress progress-striped active text-center"><div class="progress-bar"  role="progressbar" style="width: 100%;"></div></div>'),
+        tplLoading: _.template('<div data-loading-msg class="uber-loading progress progress-striped active text-center"><div class="progress-bar"  role="progressbar" style="width: 100%;"></div></div>'),
         /**
          * The template for the view
          * @type {Object}
          */
-        tplAlert: _.template('<div class="alert alert-danger" data-alert-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-warning-sign"></i></div>'),
+        tplAlert: _.template('<div class="uber-alert alert alert-danger" data-alert-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-warning-sign"></i></div>'),
         /**
          * The template for the view
          * @type {Object}
          */
-        tplInfo: _.template('<div class="alert alert-info" data-info-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-info-sign"></i></div>'),
+        tplInfo: _.template('<div class="uber-info alert alert-info" data-info-msg><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-info-sign"></i></div>'),
         /**
          * Automatically called upon object construction
          */
@@ -1179,6 +1179,13 @@
          * @type {String}
          */
         sortName : 'asc',
+        /**
+         * Automatically called upon object construction
+         */
+        initialize: function (options) {
+            // Merge selected options into object
+            this.mergeOpts(options, ['sortDir', 'sortName']);
+        },
         /**
          * Merge a specified set of options from the passed options object with properties on this object.
          * @param {Object} options The options to pick from when merging.
