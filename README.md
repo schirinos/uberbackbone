@@ -1,7 +1,14 @@
 uberbackbone
 ============
 
-A set of enhanced backbone.js views, models and collections
+A plugin with a set of enhanced backbone.js views, models and collections
+
+## Flavors
+### Stickit
+Use the uberbackbone.js file to get data binding with Stickit.
+
+### Rivets
+Use uberbackbonerivets.js to to get data binding with Rivets. 
 
 ## UberBackbone.View
 This enhanced view allows a multitude of functionality not found in the basic backbone view
@@ -10,13 +17,6 @@ This enhanced view allows a multitude of functionality not found in the basic ba
 * Automatically cache jQuery objects on template dom elements labeled with ***data-bind*** attributes
 * Model-View binding using [Stickit](https://github.com/NYTimes/backbone.stickit) or 
 [Rivets](https://github.com/mikeric/rivets)
-
-### Stickit
-Use the uberbackbone.js file to get binding with Stickit.
-
-### Rivets
-Use uberbackbonerivets.js to use Rivets. 
-
 
 ## UberBackbone.ListView
 Provides boilerplate and helper methods to create list based backbone view.
