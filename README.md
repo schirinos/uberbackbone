@@ -8,7 +8,15 @@ This enhanced view allows a multitude of functionality not found in the basic ba
 * Manage child views
 * Automatically attach external html template
 * Automatically cache jQuery objects on template dom elements labeled with ***data-bind*** attributes
-* Generate [Stickit](https://github.com/NYTimes/backbone.stickit) bindings from markup using ***data-stickit*** attributes
+* Model-View binding using [Stickit](https://github.com/NYTimes/backbone.stickit) or 
+[Rivets](https://github.com/mikeric/rivets)
+
+### Stickit
+Use the uberbackbone.js file to get binding with Stickit.
+
+### Rivets
+Use uberbackbonerivets.js to use Rivets. 
+
 
 ## UberBackbone.ListView
 Provides boilerplate and helper methods to create list based backbone view.
