@@ -25,13 +25,14 @@
                 obj.on('add remove reset', callback);
             }
 
-            obj.on('change:' + keypath, callback);
+            if (obj instanceof Backbone.Model) obj.on('change:' + keypath, callback);
         },
         unsubscribe: function(obj, keypath, callback) {
             if (obj instanceof Backbone.Collection) {
                 obj.off('add remove reset', callback);
             }
-            obj.off('change:' + keypath, callback);
+
+            if (obj instanceof Backbone.Model) obj.off('change:' + keypath, callback);
         },
         read: function(obj, keypath) {
             if (keypath in obj) {
@@ -369,6 +370,11 @@
         renderChild: function(selector, options) {
             // Check if child views is available
             if (this.views[selector]) {
+                // If the element we want to render into is cached on
+                // the view via a data-bind attribute
+                // ex: [data-bind="content"] cached as this.$content
+                // then we used that cached element instead of doing another lookup
+                // for it in the view's DOM.
                 var el = this['$'+selector] ? this['$'+selector][0] : undefined || this.$(selector)[0];
 
                 // Render view into the selector area of the parent view
