@@ -260,6 +260,10 @@
                     // Extract the first child of the dom element and use it as the view's new root element
                     this.setElement(new_elem.firstChild);
                 }
+            } else {
+                if (this.model || this.collection) {
+                    this.rivets = Rivets.bind(this.el, this.model || this.collection);
+                }
             }
         },
         /**
