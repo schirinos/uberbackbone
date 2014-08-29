@@ -21,17 +21,24 @@
     // Override default adapter to only expect a backbone model
     Rivets.adapters['.'] = {
         subscribe: function(obj, keypath, callback) {
-            obj.on('change:' + keypath, callback)
+            if (obj instanceof Backbone.Collection) {
+                obj.on('add remove reset', callback);
+            }
+
+            obj.on('change:' + keypath, callback);
         },
         unsubscribe: function(obj, keypath, callback) {
-            obj.off('change:' + keypath, callback)
+            if (obj instanceof Backbone.Collection) {
+                obj.off('add remove reset', callback);
+            }
+            obj.off('change:' + keypath, callback);
         },
         read: function(obj, keypath) {
             if (keypath in obj) {
-                return obj[keypath];
+                return _.result(obj, keypath);
             }
-
-            return obj.get(keypath)
+            
+            return obj instanceof Backbone.Collection ? obj.models : obj.get(keypath);
         },
         publish: function(obj, keypath, value) {
             obj.set(keypath, value)
