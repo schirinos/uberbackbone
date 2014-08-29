@@ -37,7 +37,7 @@
             if (keypath in obj) {
                 return _.result(obj, keypath);
             }
-            
+
             return obj instanceof Backbone.Collection ? obj.models : obj.get(keypath);
         },
         publish: function(obj, keypath, value) {
@@ -240,15 +240,17 @@
             if (_.isFunction(this.template)) {
                 // Is a model set on the view?
                 if (this.model || this.collection) {
+                    var obj = this.model || this.collection;
+
                     // Create new dom element, and insert the template as innerhtml
                     var new_elem = document.createElement('div');
-                    new_elem.innerHTML = this.template(this.model.toJSON());
+                    new_elem.innerHTML = this.template(obj.toJSON());
 
                     // Extract the first child of the dom element and use it as the view's new root element
                     this.setElement(new_elem.firstChild);
 
                     // Create view model binding
-                    this.rivets = Rivets.bind(this.el, this.model || this.collection);
+                    this.rivets = Rivets.bind(this.el, obj);
                 } else {
                     // Create new dom element, and insert the template as innerhtml
                     var new_elem = document.createElement('div');
@@ -367,8 +369,10 @@
         renderChild: function(selector, options) {
             // Check if child views is available
             if (this.views[selector]) {
+                var el = this['$'+selector] ? this['$'+selector][0] : undefined || this.$(selector)[0];
+
                 // Render view into the selector area of the parent view
-                this.views[selector].render(this.$(selector)[0], options);
+                this.views[selector].render(el, options);
             }
         },
         /**
