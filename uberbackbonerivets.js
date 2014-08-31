@@ -273,9 +273,6 @@
          * @returns this for chaining
          */
         render: function(domEl, options) {
-            // Setup model view binding
-            if (this.model) this.stickit();
-
             // For callbacks
             var self = this;
 
