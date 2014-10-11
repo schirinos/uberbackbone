@@ -376,7 +376,11 @@
                 // ex: [data-bind="content"] cached as this.$content
                 // then we used that cached element instead of doing another lookup
                 // for it in the view's DOM.
-                var el = this['$'+selector] ? this['$'+selector][0] : undefined || this.$(selector)[0];
+                var el = this['$view_'+selector] ? this['$view_'+selector][0] : undefined;
+
+                if (el === undefined) {
+                    throw new Error('No [data-view] element called "' + selector + '" defined for child view');
+                }
 
                 // Render view into the selector area of the parent view
                 this.views[selector].render(el, options);
@@ -560,6 +564,15 @@
 
                 // Attach the more precise selector, since it is lost by rewrapping element directly in jquery function ie: $(this)
                 self["$"+$(this).data("bind")].selector = this.tagName.toLowerCase() + '[data-bind="' + $(this).data("bind") + '"]';
+            });
+
+            // Iterate through the "data-view" tags
+            this.$('[data-view]').each(function (idx, elem) {
+                // Cache a copy of the jquery object for that element
+                self["$view_"+$(this).data("view")] = $(this);
+
+                // Attach the more precise selector, since it is lost by rewrapping element directly in jquery function ie: $(this)
+                self["$view_"+$(this).data("view")].selector = this.tagName.toLowerCase() + '[data-view="' + $(this).data("view") + '"]';
             });
         },
         /**
