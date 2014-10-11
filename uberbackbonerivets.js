@@ -18,8 +18,8 @@
 
 }(function (_, Backbone, Rivets, UberBackbone) {
 
-    // Override default adapter to only expect a backbone model
-    Rivets.adapters['.'] = {
+    // Add adapter for Nested Model
+    Rivets.adapters['>'] = {
         subscribe: function(obj, keypath, callback) {
             if (obj instanceof Backbone.Collection) {
                 obj.on('add remove reset', callback);
@@ -251,7 +251,7 @@
                     this.setElement(new_elem.firstChild);
 
                     // Create view model binding
-                    this.rivets = Rivets.bind(this.el, obj);
+                    this.rivets = Rivets.bind(this.el, {view: this, model: this.model || {}, collection: this.collection || {}});
                 } else {
                     // Create new dom element, and insert the template as innerhtml
                     var new_elem = document.createElement('div');
@@ -262,7 +262,7 @@
                 }
             } else {
                 if (this.model || this.collection) {
-                    this.rivets = Rivets.bind(this.el, this.model || this.collection);
+                    this.rivets = Rivets.bind(this.el, {view: this, model: this.model || {}, collection: this.collection || {}});
                 }
             }
         },
@@ -934,7 +934,7 @@
                         // assume there is a prefix
                         changedPath += '[' + attr + ']';
                     } else if (prefix){
-                        changedPath += '.' + attr;
+                        changedPath += '>' + attr;
                     } else {
                         changedPath = attr;
                     }
@@ -1079,7 +1079,7 @@
                             var nestedAttr, nestedVal;
                             for (var a in obj){
                                 if (obj.hasOwnProperty(a)) {
-                                    nestedAttr = prefix + '.' + a;
+                                    nestedAttr = prefix + '>' + a;
                                     nestedVal = obj[a];
                                     if (!_.isEqual(model.get(nestedAttr), nestedVal)) {
                                         model._delayedChange(nestedAttr, nestedVal, opts);
@@ -1124,7 +1124,7 @@
 
             if (_.isString(attrStrOrPath)){
                 // TODO this parsing can probably be more efficient
-                path = (attrStrOrPath === '') ? [''] : attrStrOrPath.match(/[^\.\[\]]+/g);
+                path = (attrStrOrPath === '') ? [''] : attrStrOrPath.match(/[^\>\[\]]+/g);
                 path = _.map(path, function(val){
                     // convert array accessors to numbers
                     return val.match(/^\d+$/) ? parseInt(val, 10) : val;
@@ -1139,7 +1139,7 @@
         createAttrStr: function(attrPath){
             var attrStr = attrPath[0];
             _.each(_.rest(attrPath), function(attr){
-                attrStr += _.isNumber(attr) ? ('[' + attr + ']') : ('.' + attr);
+                attrStr += _.isNumber(attr) ? ('[' + attr + ']') : ('>' + attr);
             });
 
             return attrStr;
