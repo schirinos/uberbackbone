@@ -19,7 +19,7 @@
 }(function (_, Backbone, Rivets, UberBackbone) {
 
     // Add adapter for Nested Model
-    Rivets.adapters['>'] = {
+    Rivets.adapters['@'] = {
         subscribe: function(obj, keypath, callback) {
             if (obj instanceof Backbone.Collection) {
                 obj.on('add remove reset', callback);
