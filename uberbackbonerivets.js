@@ -1200,11 +1200,16 @@
          */
         sortName : 'asc',
         /**
+         * Property of the model to sort by
+         * @type {String}
+         */
+        query : {},
+        /**
          * Automatically called upon object construction
          */
         initialize: function (options) {
             // Merge selected options into object
-            this.mergeOpts(options, ['sortDir', 'sortName']);
+            this.mergeOpts(options, ['sortDir', 'sortName', 'query']);
         },
         /**
          * Merge a specified set of options from the passed options object with properties on this object.
@@ -1273,6 +1278,23 @@
             // Should we fired off a sort right away
             if (doSort) this.sort();
         },
+        /**
+         * [sync description]
+         * @param  {[type]} method     [description]
+         * @param  {[type]} collection [description]
+         * @param  {[type]} options    [description]
+         * @return {[type]}            [description]
+         */
+        sync: function (method, collection, options) {
+
+            // Attach additional querystring params for GET requests
+            if (method === 'read') {
+                options = options || {};
+                options.data = _.extend(options.data || {}, this.query);
+            }
+
+            return Backbone.sync(method, collection, options);
+        }
     });
 
     // Attach to Backbone object
