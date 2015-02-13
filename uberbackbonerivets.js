@@ -1207,7 +1207,7 @@
         /**
          * Automatically called upon object construction
          */
-        initialize: function (options) {
+        initialize: function (models, options) {
             // Merge selected options into object
             this.mergeOpts(options, ['sortDir', 'sortName', 'query']);
         },
