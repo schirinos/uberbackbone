@@ -237,19 +237,35 @@
             // Pre template attachment actions
             this.preTemplate();
 
-            // Check to see if template was compiled by seeing if it is a function
+            // Stores template HTML
+            var tplHTML;
+
+            // Is template a compiled underscore template?
             if (_.isFunction(this.template)) {
-                // Is a model or collection set on the view?
+                // Init template data variable
+                var data = null;
+
+                // Is there a model or collection with data
+                // to inject into template?
                 if (this.model || this.collection) {
-                    var obj = this.model || this.collection;   
+                    var obj = this.model || this.collection;
+                    data = obj.toJSON();
                 }
 
-                // Generate json
-                var json = (obj && obj.toJSON()) || null;
+                // Generate HTML, with injected data
+                tplHTML = this.template(data);
 
+            }
+            // Treat template as HTML string
+            else if (_.isString(this.template)) {
+                tplHTML = this.template;
+            }
+
+            // Do we have a new template string to attach?
+            if (tplHTML) {
                 // Create new dom element, and insert the template as innerhtml
                 var new_elem = document.createElement('div');
-                new_elem.innerHTML = this.template(json);
+                new_elem.innerHTML = tplHTML;
 
                 // Extract the first child of the dom element and use it as the view's new root element
                 this.setElement(new_elem.firstChild);
@@ -562,8 +578,7 @@
             this.$('[data-view]').each(function (idx, elem) {
                 // Cache a copy of the jquery object for that element
                 self["$view_"+$(this).data("view")] = $(this);
-
-                // Attach the more precise selector, since it is lost by rewrapping element directly in jquery function ie: $(this)
+                   // Attach the more precise selector, since it is lost by rewrapping element directly in jquery function ie: $(this)
                 self["$view_"+$(this).data("view")].selector = this.tagName.toLowerCase() + '[data-view="' + $(this).data("view") + '"]';
             });
         },
