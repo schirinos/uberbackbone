@@ -239,32 +239,24 @@
 
             // Check to see if template was compiled by seeing if it is a function
             if (_.isFunction(this.template)) {
-                // Is a model set on the view?
+                // Is a model or collection set on the view?
                 if (this.model || this.collection) {
-                    var obj = this.model || this.collection;
-
-                    // Create new dom element, and insert the template as innerhtml
-                    var new_elem = document.createElement('div');
-                    new_elem.innerHTML = this.template(obj.toJSON());
-
-                    // Extract the first child of the dom element and use it as the view's new root element
-                    this.setElement(new_elem.firstChild);
-
-                    // Create view model binding
-                    this.rivets = Rivets.bind(this.el, {view: this, model: this.model || {}, collection: this.collection || {}});
-                } else {
-                    // Create new dom element, and insert the template as innerhtml
-                    var new_elem = document.createElement('div');
-                    new_elem.innerHTML = this.template();
-
-                    // Extract the first child of the dom element and use it as the view's new root element
-                    this.setElement(new_elem.firstChild);
+                    var obj = this.model || this.collection;   
                 }
-            } else {
-                if (this.model || this.collection) {
-                    this.rivets = Rivets.bind(this.el, {view: this, model: this.model || {}, collection: this.collection || {}});
-                }
+
+                // Generate json
+                var json = (obj && obj.toJSON()) || null;
+
+                // Create new dom element, and insert the template as innerhtml
+                var new_elem = document.createElement('div');
+                new_elem.innerHTML = this.template(json);
+
+                // Extract the first child of the dom element and use it as the view's new root element
+                this.setElement(new_elem.firstChild);
             }
+
+            // Create view model binding
+            this.rivets = Rivets.bind(this.el, this);
         },
         /**
          * Render the view to the DOM. Rendering happens in top down fashion with the base view being added to the DOM first then each subsequent child.
