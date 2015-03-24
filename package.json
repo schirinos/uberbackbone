@@ -1,5 +1,9 @@
 {
   "name": "uberbackbone",
   "version": "0.0.4",
-  "main": "uberbackbonerivets.js"
+  "main": "uberbackbonerivets.js",
+  "repository" : { 
+    "type" : "git",
+    "url" : "http://github.com/schirinos/uberbackbone.git"
+  }
 }
